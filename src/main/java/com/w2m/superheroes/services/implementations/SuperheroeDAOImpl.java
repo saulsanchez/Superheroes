@@ -15,6 +15,10 @@ public class SuperheroeDAOImpl implements SuperheroeDAO {
     @Autowired
     private SuperheroeRepository repository;
 
+    public SuperheroeDAOImpl(SuperheroeRepository repository) {
+        this.repository = repository;
+    }
+
     @Override
     @Transactional(readOnly = true)
     public Optional<Superheroe> findById(Integer id) {
