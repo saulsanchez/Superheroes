@@ -42,6 +42,22 @@ public class Superheroe implements Serializable {
         this.name = name;
     }
 
+    public LocalDateTime getEntryDate() {
+        return entryDate;
+    }
+
+    public void setEntryDate(LocalDateTime entryDate) {
+        this.entryDate = entryDate;
+    }
+
+    public LocalDateTime getModificationDate() {
+        return modificationDate;
+    }
+
+    public void setModificationDate(LocalDateTime modificationDate) {
+        this.modificationDate = modificationDate;
+    }
+
     @PrePersist
     private void beforePersist() {
         this.entryDate = LocalDateTime.now();
