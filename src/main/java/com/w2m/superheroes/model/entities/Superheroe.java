@@ -1,6 +1,8 @@
 package com.w2m.superheroes.model.entities;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -12,6 +14,8 @@ public class Superheroe implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @NotNull
+    @NotEmpty
     private String name;
     @Column(name = "entry_date")
     private LocalDateTime entryDate;

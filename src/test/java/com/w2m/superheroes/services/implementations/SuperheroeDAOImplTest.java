@@ -12,7 +12,6 @@ import java.util.List;
 import static com.w2m.superheroes.data.DummyData.superman;
 import static com.w2m.superheroes.data.DummyData.superwoman;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class SuperheroeDAOImplTest {
