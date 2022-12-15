@@ -1,0 +1,10 @@
+INSERT INTO SUPERHEROES (id, name, entry_date) VALUES (1, 'The Flash', NOW());
+INSERT INTO SUPERHEROES (id, name, entry_date) VALUES (2, 'Elektra', NOW());
+INSERT INTO SUPERHEROES (id, name, entry_date) VALUES (3, 'Captain America', NOW());
+INSERT INTO SUPERHEROES (id, name, entry_date) VALUES (4, 'Wonder Woman', NOW());
+INSERT INTO SUPERHEROES (id, name, entry_date) VALUES (5, 'Mr Fantastic', NOW());
+INSERT INTO SUPERHEROES (id, name, entry_date) VALUES (6, 'Cyclops', NOW());
+INSERT INTO SUPERHEROES (id, name, entry_date) VALUES (7, 'Supergirl', NOW());
+INSERT INTO SUPERHEROES (id, name, entry_date) VALUES (8, 'Batman', NOW());
+INSERT INTO SUPERHEROES (id, name, entry_date) VALUES (9, 'Green Lantern', NOW());
+INSERT INTO SUPERHEROES (id, name, entry_date) VALUES (10, 'Invisible Woman', NOW());
