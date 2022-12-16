@@ -1,6 +1,9 @@
-package com.w2m.superheroes.controllers;
+package com.w2m.superheroes.controllers.dtos;
 
+import com.w2m.superheroes.model.dtos.SuperheroeDTO;
 import com.w2m.superheroes.model.entities.Superheroe;
+import com.w2m.superheroes.model.mapper.SuperheroeMapper;
+import com.w2m.superheroes.model.mapper.mapstruct.SuperheroeMapperMS;
 import com.w2m.superheroes.services.contracts.SuperheroeDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -9,20 +12,22 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
-@Deprecated
 @RestController
 @RequestMapping("/")
-@ConditionalOnProperty(prefix = "app", name = "controller.enable-dto", havingValue = "false")
-public class SuperheroeController {
-
-    private final SuperheroeDAO superheroeDAO;
+@ConditionalOnProperty(prefix = "app", name = "controller.enable-dto", havingValue = "true")
+public class SuperheroeDtoController {
 
     @Autowired
-    public SuperheroeController(SuperheroeDAO superheroeDAO) {
-        this.superheroeDAO = superheroeDAO;
-    }
+    private SuperheroeDAO superheroeDAO;
+
+    @Autowired
+    SuperheroeMapperMS mapper;
 
     @GetMapping
     public ResponseEntity<?> getSuperheroes() {
@@ -36,8 +41,13 @@ public class SuperheroeController {
             return ResponseEntity.badRequest().body(response);
         }
 
+        List<SuperheroeDTO> superheroeDTOS = superheroes
+                .stream()
+                .map(mapper::mapSuperheroe)
+                .collect(Collectors.toList());
+
         response.put("success", Boolean.TRUE);
-        response.put("data", superheroes);
+        response.put("data", superheroeDTOS);
 
         return ResponseEntity.ok(response);
     }
@@ -54,8 +64,10 @@ public class SuperheroeController {
             return ResponseEntity.badRequest().body(response);
         }
 
+        SuperheroeDTO superheroeDTO = mapper.mapSuperheroe(oSuperheroe.get());
+
         response.put("success", Boolean.TRUE);
-        response.put("data", oSuperheroe.get());
+        response.put("data", superheroeDTO);
 
         return ResponseEntity.ok(response);
     }
@@ -72,8 +84,13 @@ public class SuperheroeController {
             return ResponseEntity.badRequest().body(response);
         }
 
+        List<SuperheroeDTO> superheroeDTOS = superheroes
+                .stream()
+                .map(mapper::mapSuperheroe)
+                .collect(Collectors.toList());
+
         response.put("success", Boolean.TRUE);
-        response.put("data", superheroes);
+        response.put("data", superheroeDTOS);
 
         return ResponseEntity.ok(response);
     }
@@ -91,8 +108,10 @@ public class SuperheroeController {
             return ResponseEntity.badRequest().body(response);
         }
 
+        SuperheroeDTO superheroeDTO = mapper.mapSuperheroe(superheroeDAO.save(superheroe));
+
         response.put("success", Boolean.TRUE);
-        response.put("data", superheroeDAO.save(superheroe));
+        response.put("data", superheroeDTO);
 
         return ResponseEntity.ok(response);
     }
@@ -120,8 +139,10 @@ public class SuperheroeController {
         Superheroe superheroeUpdate = oSuperheroe.get();
         superheroeUpdate.setName(superheroe.getName());
 
+        SuperheroeDTO superheroeDTO = mapper.mapSuperheroe(superheroeDAO.save(superheroeUpdate));
+
         response.put("success", Boolean.TRUE);
-        response.put("data", superheroeDAO.save(superheroeUpdate));
+        response.put("data", superheroeDTO);
 
         return ResponseEntity.ok(response);
     }
