@@ -1,5 +1,7 @@
 package com.w2m.superheroes.model.entities;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,15 +18,20 @@ import java.util.Objects;
 @ToString
 @Entity
 @Table(name = "superheroes")
+@ApiModel(description = "Superhero data", value = "Superhero", reference = "Superhero")
 public class Superheroe implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ApiModelProperty(hidden = true)
     private Integer id;
+    @ApiModelProperty(name = "Superhero name", example = "Superman", required = true)
     private String name;
     @Column(name = "entry_date")
+    @ApiModelProperty(hidden = true)
     private LocalDateTime entryDate;
     @Column(name = "modification_date")
+    @ApiModelProperty(hidden = true)
     private LocalDateTime modificationDate;
 
     public Superheroe(Integer id, String name) {
