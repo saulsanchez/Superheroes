@@ -1,9 +1,9 @@
-package com.w2m.superheroes.controllers.dtos;
+package com.w2m.superheroes.controllers;
 
-import com.w2m.superheroes.model.dtos.SuperheroeDTO;
-import com.w2m.superheroes.model.entities.Superheroe;
-import com.w2m.superheroes.model.mapper.mapstruct.SuperheroeMapperMS;
-import com.w2m.superheroes.services.contracts.SuperheroeDAO;
+import com.w2m.superheroes.models.dtos.SuperheroDTO;
+import com.w2m.superheroes.models.entities.Superhero;
+import com.w2m.superheroes.models.mappers.SuperheroMapper;
+import com.w2m.superheroes.services.SuperheroDAO;
 import com.w2m.superheroes.utils.Constants;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
@@ -24,26 +24,26 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/superheroes")
 @Api(value = "Actions related to superheroes", tags = "Actions on superheroes")
-public class SuperheroeDtoController {
+public class SuperheroController {
 
-    Logger logger = LoggerFactory.getLogger(SuperheroeDtoController.class);
-
-    @Autowired
-    private SuperheroeDAO superheroeDAO;
+    Logger logger = LoggerFactory.getLogger(SuperheroController.class);
 
     @Autowired
-    SuperheroeMapperMS mapper;
+    private SuperheroDAO superheroDAO;
+
+    @Autowired
+    SuperheroMapper mapper;
 
     @GetMapping
     @ApiOperation(value = "Search all superheroes")
     @ApiResponses({
-            @ApiResponse(code = 200, message = Constants.SUPERHEROES_NOT_FOUND, response = SuperheroeDTO.class),
+            @ApiResponse(code = 200, message = Constants.SUPERHEROES_NOT_FOUND, response = SuperheroDTO.class),
             @ApiResponse(code = 404, message = Constants.SUPERHEROES_NOT_FOUND)
     })
     public ResponseEntity<?> getSuperheroes() {
 
         Map<String, Object> response = new HashMap<>();
-        List<Superheroe> superheroes = (List<Superheroe>) superheroeDAO.findAll();
+        List<Superhero> superheroes = (List<Superhero>) superheroDAO.findAll();
 
         if(superheroes.isEmpty()) {
             logger.error(Constants.SUPERHEROES_NOT_FOUND);
@@ -52,13 +52,13 @@ public class SuperheroeDtoController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
 
-        List<SuperheroeDTO> superheroeDTOS = superheroes
+        List<SuperheroDTO> superheroDTOS = superheroes
                 .stream()
-                .map(mapper::mapSuperheroe)
+                .map(mapper::mapSuperhero)
                 .collect(Collectors.toList());
 
         response.put(Constants.SUCCESS, Boolean.TRUE);
-        response.put(Constants.DATA, superheroeDTOS);
+        response.put(Constants.DATA, superheroDTOS);
 
         return ResponseEntity.ok(response);
     }
@@ -66,25 +66,25 @@ public class SuperheroeDtoController {
     @GetMapping("/{id}")
     @ApiOperation(value = "Search superhero by code")
     @ApiResponses({
-            @ApiResponse(code = 200, message = Constants.SATISFACTORILY_EXECUTED, response = SuperheroeDTO.class),
+            @ApiResponse(code = 200, message = Constants.SATISFACTORILY_EXECUTED, response = SuperheroDTO.class),
             @ApiResponse(code = 404, message = "No superheroes with the given id have been found in the database")
     })
-    public ResponseEntity<?> getSuperheroe (@PathVariable(value = "id") Integer id) {
+    public ResponseEntity<?> getSuperhero(@PathVariable(value = "id") Integer id) {
 
         Map<String, Object> response = new HashMap<>();
-        Optional<Superheroe> oSuperheroe = superheroeDAO.findById(id);
+        Optional<Superhero> oSuperhero = superheroDAO.findById(id);
 
-        if(!oSuperheroe.isPresent()) {
+        if(!oSuperhero.isPresent()) {
             logger.error(String.format(Constants.SUPERHERO_ID_NOT_FOUND, id));
             response.put(Constants.SUCCESS, Boolean.FALSE);
             response.put(Constants.MESSAGE, String.format(Constants.SUPERHERO_ID_NOT_FOUND, id));
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
 
-        SuperheroeDTO superheroeDTO = mapper.mapSuperheroe(oSuperheroe.get());
+        SuperheroDTO superheroDTO = mapper.mapSuperhero(oSuperhero.get());
 
         response.put(Constants.SUCCESS, Boolean.TRUE);
-        response.put(Constants.DATA, superheroeDTO);
+        response.put(Constants.DATA, superheroDTO);
 
         return ResponseEntity.ok(response);
     }
@@ -92,13 +92,13 @@ public class SuperheroeDtoController {
     @GetMapping("/search")
     @ApiOperation(value = "Search superhero by name")
     @ApiResponses({
-            @ApiResponse(code = 200, message = Constants.SATISFACTORILY_EXECUTED, response = SuperheroeDTO.class),
+            @ApiResponse(code = 200, message = Constants.SATISFACTORILY_EXECUTED, response = SuperheroDTO.class),
             @ApiResponse(code = 404, message = "No superheroes with the given name have been found in the database")
     })
     public ResponseEntity<?> getSuperheroesByName(@RequestParam String name) {
 
         Map<String, Object> response = new HashMap<>();
-        List<Superheroe> superheroes = (List<Superheroe>) superheroeDAO.findSuperheroesByNameContainsIgnoreCase(name);
+        List<Superhero> superheroes = (List<Superhero>) superheroDAO.findSuperheroesByNameContainsIgnoreCase(name);
 
         if(superheroes.isEmpty()) {
             logger.error(String.format(Constants.SUPERHERO_NAME_NOT_FOUND, name));
@@ -107,13 +107,13 @@ public class SuperheroeDtoController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
 
-        List<SuperheroeDTO> superheroeDTOS = superheroes
+        List<SuperheroDTO> superheroDTOS = superheroes
                 .stream()
-                .map(mapper::mapSuperheroe)
+                .map(mapper::mapSuperhero)
                 .collect(Collectors.toList());
 
         response.put(Constants.SUCCESS, Boolean.TRUE);
-        response.put(Constants.DATA, superheroeDTOS);
+        response.put(Constants.DATA, superheroDTOS);
 
         return ResponseEntity.ok(response);
     }
@@ -123,7 +123,7 @@ public class SuperheroeDtoController {
     @ApiResponses({
             @ApiResponse(code = 201, message = "Superhero created")
     })
-    public ResponseEntity<?> createSuperheroe(@Valid @RequestBody Superheroe superheroe, BindingResult result) {
+    public ResponseEntity<?> createSuperhero(@Valid @RequestBody Superhero superhero, BindingResult result) {
 
         Map<String, Object> response = new HashMap<>();
 
@@ -136,10 +136,10 @@ public class SuperheroeDtoController {
             return ResponseEntity.badRequest().body(response);
         }
 
-        SuperheroeDTO superheroeDTO = mapper.mapSuperheroe(superheroeDAO.save(superheroe));
+        SuperheroDTO superheroDTO = mapper.mapSuperhero(superheroDAO.save(superhero));
 
         response.put(Constants.SUCCESS, Boolean.TRUE);
-        response.put(Constants.DATA, superheroeDTO);
+        response.put(Constants.DATA, superheroDTO);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
@@ -147,13 +147,13 @@ public class SuperheroeDtoController {
     @PutMapping("/{id}")
     @ApiOperation(value = "Update superhero")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "Superhero updated successfully", response = SuperheroeDTO.class),
+            @ApiResponse(code = 200, message = "Superhero updated successfully", response = SuperheroDTO.class),
             @ApiResponse(code = 404, message = "No superheroes with the given id have been found in the database")
     })
-    public ResponseEntity<?> updateSuperheroe(@PathVariable Integer id, @Valid @RequestBody Superheroe superheroe, BindingResult result) {
+    public ResponseEntity<?> updateSuperhero(@PathVariable Integer id, @Valid @RequestBody Superhero superhero, BindingResult result) {
 
         Map<String, Object> response = new HashMap<>();
-        Optional<Superheroe> oSuperheroe = superheroeDAO.findById(id);
+        Optional<Superhero> oSuperhero = superheroDAO.findById(id);
 
         if (result.hasErrors()) {
             result.getFieldErrors().forEach(error -> {
@@ -164,20 +164,20 @@ public class SuperheroeDtoController {
             return ResponseEntity.badRequest().body(response);
         }
 
-        if(!oSuperheroe.isPresent()) {
+        if(!oSuperhero.isPresent()) {
             logger.error(String.format(Constants.SUPERHERO_ID_NOT_FOUND, id));
             response.put(Constants.SUCCESS, Boolean.FALSE);
             response.put(Constants.MESSAGE, String.format(Constants.SUPERHERO_ID_NOT_FOUND, id));
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
 
-        Superheroe superheroeUpdate = oSuperheroe.get();
-        superheroeUpdate.setName(superheroe.getName());
+        Superhero superheroUpdate = oSuperhero.get();
+        superheroUpdate.setName(superhero.getName());
 
-        SuperheroeDTO superheroeDTO = mapper.mapSuperheroe(superheroeDAO.save(superheroeUpdate));
+        SuperheroDTO superheroDTO = mapper.mapSuperhero(superheroDAO.save(superheroUpdate));
 
         response.put(Constants.SUCCESS, Boolean.TRUE);
-        response.put(Constants.DATA, superheroeDTO);
+        response.put(Constants.DATA, superheroDTO);
 
         return ResponseEntity.ok(response);
     }
@@ -185,22 +185,22 @@ public class SuperheroeDtoController {
     @DeleteMapping("/{id}")
     @ApiOperation(value = "Delete superhero")
     @ApiResponses({
-            @ApiResponse(code = 204, message = "Superhero deleted successfully"),
+            @ApiResponse(code = 200, message = "Superhero deleted successfully"),
             @ApiResponse(code = 404, message = "No superheroes with the given id have been found in the database")
     })
-    public ResponseEntity<?> deleteSuperheroe(@PathVariable Integer id) {
+    public ResponseEntity<?> deleteSuperhero(@PathVariable Integer id) {
 
         Map<String, Object> response = new HashMap<>();
 
-        ResponseEntity<?> getSuperheroeResponseEntity = getSuperheroe(id);
+        ResponseEntity<?> getSuperheroeResponseEntity = getSuperhero(id);
 
         if (getSuperheroeResponseEntity.getStatusCode().toString().equals(HttpStatus.NOT_FOUND.toString())) {
             return getSuperheroeResponseEntity;
         }
 
-        superheroeDAO.deleteById(id);
+        superheroDAO.deleteById(id);
         response.put(Constants.SUCCESS, Boolean.TRUE);
 
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
+        return ResponseEntity.ok().body(response);
     }
 }

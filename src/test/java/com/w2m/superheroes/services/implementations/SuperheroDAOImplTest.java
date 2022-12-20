@@ -1,8 +1,9 @@
 package com.w2m.superheroes.services.implementations;
 
-import com.w2m.superheroes.model.entities.Superheroe;
-import com.w2m.superheroes.repositories.SuperheroeRepository;
-import com.w2m.superheroes.services.contracts.SuperheroeDAO;
+import com.w2m.superheroes.models.entities.Superhero;
+import com.w2m.superheroes.repositories.SuperheroRepository;
+import com.w2m.superheroes.services.SuperheroDAO;
+import com.w2m.superheroes.services.impl.SuperheroDAOImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,15 +15,15 @@ import static com.w2m.superheroes.data.DummyData.superwoman;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.*;
 
-class SuperheroeDAOImplTest {
+class SuperheroDAOImplTest {
 
-    SuperheroeDAO superheroeDAO;
-    SuperheroeRepository repository;
+    SuperheroDAO superheroeDAO;
+    SuperheroRepository repository;
 
     @BeforeEach
     void setUp() {
-        repository = mock(SuperheroeRepository.class);
-        superheroeDAO = new SuperheroeDAOImpl(repository);
+        repository = mock(SuperheroRepository.class);
+        superheroeDAO = new SuperheroDAOImpl(repository);
     }
 
     @Test
@@ -34,7 +35,7 @@ class SuperheroeDAOImplTest {
                 .thenReturn(Arrays.asList(superman(true), superwoman(true)));
 
         //When
-        List<Superheroe> superheroes = (List<Superheroe>) superheroeDAO.findSuperheroesByNameContainsIgnoreCase(name);
+        List<Superhero> superheroes = (List<Superhero>) superheroeDAO.findSuperheroesByNameContainsIgnoreCase(name);
 
         //Then
         assertThat(superheroes.get(0)).isEqualTo(superman(true));

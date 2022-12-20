@@ -1,8 +1,8 @@
-package com.w2m.superheroes.services.implementations;
+package com.w2m.superheroes.services.impl;
 
-import com.w2m.superheroes.model.entities.Superheroe;
-import com.w2m.superheroes.repositories.SuperheroeRepository;
-import com.w2m.superheroes.services.contracts.SuperheroeDAO;
+import com.w2m.superheroes.models.entities.Superhero;
+import com.w2m.superheroes.repositories.SuperheroRepository;
+import com.w2m.superheroes.services.SuperheroDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,30 +10,30 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 @Service
-public class SuperheroeDAOImpl implements SuperheroeDAO {
+public class SuperheroDAOImpl implements SuperheroDAO {
 
     @Autowired
-    private SuperheroeRepository repository;
+    private SuperheroRepository repository;
 
-    public SuperheroeDAOImpl(SuperheroeRepository repository) {
+    public SuperheroDAOImpl(SuperheroRepository repository) {
         this.repository = repository;
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<Superheroe> findById(Integer id) {
+    public Optional<Superhero> findById(Integer id) {
         return repository.findById(id);
     }
 
     @Override
     @Transactional
-    public Superheroe save(Superheroe superheroe) {
-        return repository.save(superheroe);
+    public Superhero save(Superhero superhero) {
+        return repository.save(superhero);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Iterable<Superheroe> findAll() {
+    public Iterable<Superhero> findAll() {
         return repository.findAll();
     }
 
@@ -45,7 +45,7 @@ public class SuperheroeDAOImpl implements SuperheroeDAO {
 
     @Override
     @Transactional(readOnly = true)
-    public Iterable<Superheroe> findSuperheroesByNameContainsIgnoreCase(String name) {
+    public Iterable<Superhero> findSuperheroesByNameContainsIgnoreCase(String name) {
         return repository.findSuperheroesByNameContainsIgnoreCase(name);
     }
 

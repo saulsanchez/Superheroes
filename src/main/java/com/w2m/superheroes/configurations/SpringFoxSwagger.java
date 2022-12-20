@@ -1,4 +1,4 @@
-package com.w2m.superheroes.configuration;
+package com.w2m.superheroes.configurations;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,7 +21,7 @@ public class SpringFoxSwagger {
     public Docket getDocket() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.w2m.superheroes.controllers.dtos"))
+                .apis(RequestHandlerSelectors.basePackage("com.w2m.superheroes.controllers"))
                 .paths(PathSelectors.any())
                 .build()
                 .apiInfo(apiInfo());

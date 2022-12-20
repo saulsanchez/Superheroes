@@ -1,4 +1,4 @@
-package com.w2m.superheroes.model.dtos;
+package com.w2m.superheroes.models.dtos;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 @ApiModel(description = "Superhero data", value = "SuperheroDTO", reference = "SuperheroDTO")
-public class SuperheroeDTO {
+public class SuperheroDTO {
 
     @ApiModelProperty(name = "System code", example = "1")
     private Integer id;

@@ -1,22 +1,22 @@
 package com.w2m.superheroes.data;
 
-import com.w2m.superheroes.model.entities.Superheroe;
+import com.w2m.superheroes.models.entities.Superhero;
 
 public class DummyData {
 
-    public static Superheroe batman() {
-        return new Superheroe (null, "Batman");
+    public static Superhero batman() {
+        return new Superhero(null, "Batman");
     }
 
-    public static Superheroe superman(boolean withId) {
-        return new Superheroe(withId ? 1 : null, "Superman");
+    public static Superhero superman(boolean withId) {
+        return new Superhero(withId ? 1 : null, "Superman");
     }
 
-    public static Superheroe spiderman() {
-        return new Superheroe(null, "Spiderman");
+    public static Superhero spiderman() {
+        return new Superhero(null, "Spiderman");
     }
 
-    public static Superheroe superwoman(boolean withId) {
-        return new Superheroe (withId ? 2 : null, "Superwoman");
+    public static Superhero superwoman(boolean withId) {
+        return new Superhero(withId ? 2 : null, "Superwoman");
     }
 }

@@ -1,4 +1,4 @@
-package com.w2m.superheroes.model.entities;
+package com.w2m.superheroes.models.entities;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -19,7 +19,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "superheroes")
 @ApiModel(description = "Superhero data", value = "Superhero", reference = "Superhero")
-public class Superheroe implements Serializable {
+public class Superhero implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,7 +34,7 @@ public class Superheroe implements Serializable {
     @ApiModelProperty(hidden = true)
     private LocalDateTime modificationDate;
 
-    public Superheroe(Integer id, String name) {
+    public Superhero(Integer id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -53,7 +53,7 @@ public class Superheroe implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Superheroe that = (Superheroe) o;
+        Superhero that = (Superhero) o;
         return id.equals(that.id) && name.equals(that.name);
     }
 
