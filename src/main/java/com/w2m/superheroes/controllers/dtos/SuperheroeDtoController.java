@@ -9,7 +9,6 @@ import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -24,7 +23,6 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/superheroes")
-@ConditionalOnProperty(prefix = "app", name = "controller.enable-dto", havingValue = "true")
 @Api(value = "Actions related to superheroes", tags = "Actions on superheroes")
 public class SuperheroeDtoController {
 
